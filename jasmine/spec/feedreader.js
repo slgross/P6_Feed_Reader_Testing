@@ -97,12 +97,9 @@ $(function() {
 		 * Remember, loadFeed() is asynchronous so this test will require
 		 * the use of Jasmine's beforeEach and asynchronous done() function.
 		 */
-		it('Asynch: at least 1 .entry element added', function(done){
-			var entry = $('.feed a').children('.entry');
-			expect(entry.length).toBeGreaterThan(0);
-			done();
+		it('Asynch: at least 1 .entry element added', function(){
+			expect($(".entry").length).not.toBe(0);
 		});
-
 	});
 
 		/* New test suite named "New Feed Selection" */
@@ -112,18 +109,26 @@ $(function() {
 		 * Remember, loadFeed() is asynchronous.
 		 */
 	describe('New Feed Selection', function(){
-		var beforeentry,
+		var beforeEntry,
 			entryAfterchange;
 
-		/* save text of the first entry, then load second feed */
+		/* actually testing header title - so load old header (zero)
+		 * and then check that new header (one) has content too
+		 */
 		beforeEach(function(done){
-			beforeentry = $('.feed a').children('.entry');
-			loadFeed(2, done);
+			$('.feed').empty();
+			loadFeed(0, function() { 
+				beforeEntry = $('.feed').text();
+			});
+			loadFeed(1, function() { 
+				entryAfterchange = $('.feed').text();
+				done();
+			});
 		});
 
 		it('New feed when content changes', function(done){
 			entryAfterchange = $('.feed a').children('.entry');
-			expect(beforeentry).not.toBe(entryAfterchange);
+			expect(beforeEntry).not.toBe(entryAfterchange);
 			done();
 		});
 
