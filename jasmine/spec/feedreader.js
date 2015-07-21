@@ -117,22 +117,17 @@ $(function() {
 
 		beforeEach(function(done){
 			$('.feed').empty();
-			beforeEntry = $('.feed a').children('.entry');
 
 			loadFeed(0, function() {
-				loadFeed(1, function(){
-					done();
-				});
+				beforeEntry = $('.feed').html();
+				loadFeed(1, done);
 			});
 		});
 
 		/* two names should be different */
-		it('New feed when content changes', function(done){
-			expect($('.feed a').children('.entry')).not.toBe(beforeEntry);
+		it('New feed when content changes', function(){
+			expect($('.feed').html()).not.toBe(beforeEntry);
 		});
 
-		afterEach(function(done){
-			loadFeed(0, done);
-		});
 	});
 }());
