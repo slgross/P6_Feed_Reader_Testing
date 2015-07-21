@@ -109,31 +109,29 @@ $(function() {
 		 * Remember, loadFeed() is asynchronous.
 		 */
 	describe('New Feed Selection', function(){
-		var beforeEntry,
-			entryAfterchange;
+		var beforeEntry;
 
 		/* actually testing header title - so load old header (zero)
 		 * and then check that new header (one) has content too
 		 */
+
 		beforeEach(function(done){
 			$('.feed').empty();
-			loadFeed(0, function() { 
-				beforeEntry = $('.feed').text();
-			});
-			loadFeed(1, function() { 
-				entryAfterchange = $('.feed').text();
-				done();
+			beforeEntry = $('.feed a').children('.entry');
+
+			loadFeed(0, function() {
+				loadFeed(1, function(){
+					done();
+				});
 			});
 		});
 
+		/* two names should be different */
 		it('New feed when content changes', function(done){
-			entryAfterchange = $('.feed a').children('.entry');
-			expect(beforeEntry).not.toBe(entryAfterchange);
-			done();
+			expect($('.feed a').children('.entry')).not.toBe(beforeEntry);
 		});
 
 		afterEach(function(done){
-			//loading back the first feed
 			loadFeed(0, done);
 		});
 	});
